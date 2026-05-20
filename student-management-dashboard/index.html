@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcadeX — Student Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Animated grid background -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="bg-glow bg-glow-3"></div>
+
+  <!-- MAIN MENU -->
+  <div id="screen-main" class="screen active">
+    <div class="hero-container">
+      <div class="logo-badge">
+        <span class="logo-icon">🏫</span>
+        <div class="logo-pulse"></div>
+      </div>
+      <h1 class="hero-title">ACADE<span class="text-accent">X</span></h1>
+      <p class="hero-sub">Student Management System</p>
+      <div class="divider-line"></div>
+      <div class="menu-cards">
+        <div class="menu-card card-professor" onclick="navigate('professor')">
+          <div class="card-icon">📚</div>
+          <div class="card-content">
+            <h2>Professor Panel</h2>
+            <p>Manage students, grades, and feedback</p>
+            <div class="card-tags">
+              <span class="tag">Add Students</span>
+              <span class="tag">Sort & Search</span>
+              <span class="tag">Feedback</span>
+            </div>
+          </div>
+          <div class="card-arrow">→</div>
+          <div class="card-glow"></div>
+        </div>
+        <div class="menu-card card-student" onclick="navigate('student')">
+          <div class="card-icon">🎓</div>
+          <div class="card-content">
+            <h2>Student Panel</h2>
+            <p>View GPA, submit and track feedback</p>
+            <div class="card-tags">
+              <span class="tag tag-gold">View GPA</span>
+              <span class="tag tag-gold">Feedback</span>
+            </div>
+          </div>
+          <div class="card-arrow">→</div>
+          <div class="card-glow glow-gold"></div>
+        </div>
+      </div>
+      <div class="system-stats">
+        <div class="stat-pill"><span id="stat-count">0</span> Students</div>
+        <div class="stat-pill"><span id="stat-feedback">0</span> Feedbacks</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFESSOR PANEL -->
+  <div id="screen-professor" class="screen">
+    <div class="panel-layout">
+      <aside class="sidebar">
+        <div class="sidebar-logo" onclick="navigate('main')">
+          <span>← ACADE<span class="text-accent">X</span></span>
+        </div>
+        <nav class="sidebar-nav">
+          <button class="nav-btn active" data-panel="add-student" onclick="showSubPanel(this,'add-student')">
+            <span class="nav-icon">➕</span> Add Student
+          </button>
+          <button class="nav-btn" data-panel="view-students" onclick="showSubPanel(this,'view-students')">
+            <span class="nav-icon">👥</span> View Students
+          </button>
+          <button class="nav-btn" data-panel="sort-students" onclick="showSubPanel(this,'sort-students')">
+            <span class="nav-icon">⚡</span> Sort
+          </button>
+          <button class="nav-btn" data-panel="search-student" onclick="showSubPanel(this,'search-student')">
+            <span class="nav-icon">🔍</span> Search
+          </button>
+          <button class="nav-btn" data-panel="view-feedback" onclick="showSubPanel(this,'view-feedback')">
+            <span class="nav-icon">💬</span> View Feedback
+          </button>
+          <button class="nav-btn" data-panel="reply-feedback" onclick="showSubPanel(this,'reply-feedback')">
+            <span class="nav-icon">↩️</span> Reply Feedback
+          </button>
+          <button class="nav-btn nav-update" data-panel="update-student" onclick="showSubPanel(this,'update-student')">
+            <span class="nav-icon">✏️</span> Update Student
+          </button>
+          <button class="nav-btn nav-danger" data-panel="delete-student" onclick="showSubPanel(this,'delete-student')">
+            <span class="nav-icon">🗑️</span> Delete Student
+          </button>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="mini-stat">
+            <span class="ms-label">Students</span>
+            <span class="ms-value" id="sb-student-count">0</span>
+          </div>
+          <div class="mini-stat">
+            <span class="ms-label">Feedbacks</span>
+            <span class="ms-value" id="sb-feedback-count">0</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="panel-main">
+        <!-- Add Student -->
+        <div class="sub-panel active" id="sub-add-student">
+          <div class="panel-header">
+            <h2><span class="text-accent">➕</span> Add Student</h2>
+            <p>Register a new student into the system</p>
+          </div>
+          <form class="styled-form" onsubmit="addStudentForm(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Student ID <span class="req">*</span></label>
+                <input type="number" id="f-id" placeholder="e.g. 202401" min="1" max="999999" required />
+              </div>
+              <div class="form-group">
+                <label>Full Name <span class="req">*</span></label>
+                <input type="text" id="f-name" placeholder="e.g. Juan Dela Cruz" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Year Level</label>
+                <select id="f-year">
+                  <option value="1st">1st Year</option>
+                  <option value="2nd">2nd Year</option>
+                  <option value="3rd">3rd Year</option>
+                  <option value="4th">4th Year</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Semester</label>
+                <select id="f-semester">
+                  <option value="1st">1st Semester</option>
+                  <option value="2nd">2nd Semester</option>
+                  <option value="3rd">3rd Semester</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Section</label>
+                <input type="text" id="f-section" placeholder="e.g. BSCS-3A" required />
+              </div>
+              <div class="form-group">
+                <label>GPA <span class="req">*</span> <span class="hint">(0.0 – 4.0)</span></label>
+                <input type="number" id="f-gpa" placeholder="e.g. 3.75" min="0" max="4" step="0.01" required />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <span>ADD STUDENT</span><span class="btn-arrow">→</span>
+            </button>
+          </form>
+          <div id="add-msg" class="flash-msg"></div>
+        </div>
+
+        <!-- View Students -->
+        <div class="sub-panel" id="sub-view-students">
+          <div class="panel-header">
+            <h2><span class="text-accent">👥</span> All Students</h2>
+            <p>Complete student registry</p>
+          </div>
+          <div id="students-table-wrap">
+            <div class="empty-state" id="empty-students">
+              <div class="empty-icon">📭</div>
+              <p>No students registered yet.</p>
+            </div>
+            <table class="data-table hidden" id="students-table">
+              <thead>
+                <tr>
+                  <th>ID</th><th>Name</th><th>Year</th><th>Semester</th><th>Section</th><th>GPA</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="students-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sort Students -->
+        <div class="sub-panel" id="sub-sort-students">
+          <div class="panel-header">
+            <h2><span class="text-accent">⚡</span> Sort Students</h2>
+            <p>Order your list by criteria</p>
+          </div>
+          <div class="sort-cards">
+            <div class="sort-card" onclick="sortByName()">
+              <div class="sc-icon">🔤</div>
+              <h3>Sort by Name</h3>
+              <p>Alphabetical A → Z</p>
+              <button class="btn btn-sm">Apply</button>
+            </div>
+            <div class="sort-card" onclick="sortByGPA()">
+              <div class="sc-icon">📊</div>
+              <h3>Sort by GPA</h3>
+              <p>Highest to Lowest</p>
+              <button class="btn btn-sm btn-gold">Apply</button>
+            </div>
+          </div>
+          <div id="sort-msg" class="flash-msg"></div>
+          <div id="sort-preview-wrap" class="mt-2">
+            <table class="data-table hidden" id="sort-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>ID</th><th>Name</th><th>Year</th><th>GPA</th>
+                </tr>
+              </thead>
+              <tbody id="sort-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Search Student -->
+        <div class="sub-panel" id="sub-search-student">
+          <div class="panel-header">
+            <h2><span class="text-accent">🔍</span> Search Student</h2>
+            <p>Find by Student ID</p>
+          </div>
+          <div class="search-bar-wrap">
+            <input type="number" id="search-id" class="search-input" placeholder="Enter Student ID…" min="1" max="999999" />
+            <button class="btn btn-primary" onclick="searchStudent()">SEARCH</button>
+          </div>
+          <div id="search-result"></div>
+        </div>
+
+        <!-- View Feedback (Professor) -->
+        <div class="sub-panel" id="sub-view-feedback">
+          <div class="panel-header">
+            <h2><span class="text-accent">💬</span> Student Feedback</h2>
+            <p>Messages submitted by students</p>
+          </div>
+          <div id="prof-feedback-list">
+            <div class="empty-state"><div class="empty-icon">💭</div><p>No feedback submitted yet.</p></div>
+          </div>
+        </div>
+
+        <!-- Reply Feedback -->
+        <div class="sub-panel" id="sub-reply-feedback">
+          <div class="panel-header">
+            <h2><span class="text-accent">↩️</span> Reply to Feedback</h2>
+            <p>Respond to student messages</p>
+          </div>
+          <div class="search-bar-wrap">
+            <input type="number" id="reply-id" class="search-input" placeholder="Enter Student ID…" min="1" max="999999" />
+            <button class="btn btn-primary" onclick="loadFeedbackForReply()">LOAD</button>
+          </div>
+          <div id="reply-area"></div>
+        </div>
+        <!-- Update Student -->
+        <div class="sub-panel" id="sub-update-student">
+          <div class="panel-header">
+            <h2><span class="text-update">✏️</span> Update Student</h2>
+            <p>Search for a student, then edit their information</p>
+          </div>
+          <!-- Step 1: Search -->
+          <div class="search-bar-wrap">
+            <input type="number" id="update-search-id" class="search-input" placeholder="Enter Student ID…" min="1" max="999999" />
+            <button class="btn btn-update" onclick="lookupStudentForUpdate()">FIND</button>
+          </div>
+          <div id="update-msg" class="flash-msg"></div>
+          <!-- Step 2: Edit form (hidden until student found) -->
+          <div id="update-form-wrap" class="hidden">
+            <div class="update-id-banner" id="update-id-banner"></div>
+            <form class="styled-form" onsubmit="submitStudentUpdate(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Full Name <span class="req">*</span></label>
+                  <input type="text" id="u-name" placeholder="Full name" required />
+                </div>
+                <div class="form-group">
+                  <label>GPA <span class="req">*</span> <span class="hint">(0.0 – 4.0)</span></label>
+                  <input type="number" id="u-gpa" placeholder="e.g. 3.75" min="0" max="4" step="0.01" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Year Level</label>
+                  <select id="u-year">
+                    <option value="1st">1st Year</option>
+                    <option value="2nd">2nd Year</option>
+                    <option value="3rd">3rd Year</option>
+                    <option value="4th">4th Year</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Semester</label>
+                  <select id="u-semester">
+                    <option value="1st">1st Semester</option>
+                    <option value="2nd">2nd Semester</option>
+                    <option value="3rd">3rd Semester</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Section</label>
+                <input type="text" id="u-section" placeholder="e.g. BSCS-3A" required />
+              </div>
+              <div class="update-actions">
+                <button type="submit" class="btn btn-update">
+                  <span>SAVE CHANGES</span><span class="btn-arrow">→</span>
+                </button>
+                <button type="button" class="btn-ghost" onclick="cancelUpdate()">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Delete Student -->
+        <div class="sub-panel" id="sub-delete-student">
+          <div class="panel-header">
+            <h2><span class="text-red">🗑️</span> Delete Student</h2>
+            <p>Permanently remove a student and all their feedback</p>
+          </div>
+          <div class="search-bar-wrap">
+            <input type="number" id="delete-id" class="search-input" placeholder="Enter Student ID to delete…" min="1" max="999999" />
+            <button class="btn btn-danger" onclick="lookupStudentForDelete()">FIND</button>
+          </div>
+          <div id="delete-preview"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- STUDENT PANEL -->
+  <div id="screen-student" class="screen">
+    <div class="panel-layout">
+      <aside class="sidebar sidebar-gold">
+        <div class="sidebar-logo" onclick="navigate('main')">
+          <span>← ACADE<span class="text-accent-gold">X</span></span>
+        </div>
+        <nav class="sidebar-nav">
+          <button class="nav-btn nav-gold active" data-panel="view-gpa" onclick="showSubPanel(this,'view-gpa','student')">
+            <span class="nav-icon">📊</span> View GPA
+          </button>
+          <button class="nav-btn nav-gold" data-panel="leave-feedback" onclick="showSubPanel(this,'leave-feedback','student')">
+            <span class="nav-icon">✍️</span> Leave Feedback
+          </button>
+          <button class="nav-btn nav-gold" data-panel="my-feedback" onclick="showSubPanel(this,'my-feedback','student')">
+            <span class="nav-icon">📨</span> My Feedback
+          </button>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="role-badge">🎓 Student Mode</div>
+        </div>
+      </aside>
+
+      <main class="panel-main">
+        <!-- View GPA -->
+        <div class="sub-panel active" id="sub-view-gpa">
+          <div class="panel-header">
+            <h2><span class="text-accent-gold">📊</span> Student GPA</h2>
+            <p>Enter your ID to view your academic record</p>
+          </div>
+          <div class="search-bar-wrap">
+            <input type="number" id="gpa-search-id" class="search-input" placeholder="Enter your Student ID…" min="1" max="999999" />
+            <button class="btn btn-gold" onclick="viewMyGPA()">VIEW GPA</button>
+          </div>
+          <div id="gpa-result"></div>
+        </div>
+
+        <!-- Leave Feedback -->
+        <div class="sub-panel" id="sub-leave-feedback">
+          <div class="panel-header">
+            <h2><span class="text-accent-gold">✍️</span> Leave Feedback</h2>
+            <p>Send a message to your professor</p>
+          </div>
+          <form class="styled-form" onsubmit="submitFeedback(event)">
+            <div class="form-group">
+              <label>Your Student ID <span class="req">*</span></label>
+              <input type="number" id="fb-student-id" placeholder="Enter your ID" min="1" max="999999" required />
+            </div>
+            <div class="form-group">
+              <label>Your Message <span class="req">*</span></label>
+              <textarea id="fb-message" rows="5" placeholder="Write your feedback here…" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-gold">
+              <span>SUBMIT FEEDBACK</span><span class="btn-arrow">→</span>
+            </button>
+          </form>
+          <div id="fb-msg" class="flash-msg"></div>
+        </div>
+
+        <!-- My Feedback -->
+        <div class="sub-panel" id="sub-my-feedback">
+          <div class="panel-header">
+            <h2><span class="text-accent-gold">📨</span> My Feedback</h2>
+            <p>View your submissions and professor replies</p>
+          </div>
+          <div class="search-bar-wrap">
+            <input type="number" id="myfb-id" class="search-input" placeholder="Enter your Student ID…" min="1" max="999999" />
+            <button class="btn btn-gold" onclick="viewMyFeedback()">VIEW</button>
+          </div>
+          <div id="my-feedback-list"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast"></div>
+
+  <script src="js/students.js"></script>
+  <script src="js/feedback.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
